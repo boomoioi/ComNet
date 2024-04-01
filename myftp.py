@@ -52,6 +52,7 @@ def startFTP():
             control_socket = startSocket(target_ip, target_port)
             if control_socket == None: 
                 continue
+            print(f"Connected to {target_ip}.")
             message =  control_socket.recv(2048).decode().strip()
             print(message)
             if (message[0] == "5"):
@@ -64,12 +65,13 @@ def startFTP():
             if (message[0] == "5"):
                 continue
 
-            username = input(f"User ({target_ip}:(none)): ")
+            username = input(f"User ({target_ip}:(none)): ").strip()
             command_message = "USER " + username + "\r\n"
             control_socket.sendall(command_message.encode())
             message =  control_socket.recv(2048).decode().strip()
             print(message)
             if (message[0] == "5"):
+                print("Login failed.")
                 continue
 
             password = input("Password: ")
@@ -79,6 +81,7 @@ def startFTP():
             print()
             print(message)
             if (message[0] == "5"):
+                print("Login failed.")
                 continue
             
 
@@ -99,6 +102,7 @@ def startFTP():
                 message =  control_socket.recv(2048).decode().strip()
                 print(message)
                 if (message[0] == "5"):
+                    print("Login failed.")
                     continue
                 password = input("Password: ")
             elif (len(args) == 2):
@@ -108,6 +112,7 @@ def startFTP():
                 message =  control_socket.recv(2048).decode().strip()
                 print(message)
                 if (message[0] == "5"):
+                    print("Login failed.")
                     continue
                 password = input("Password: ")
             elif (len(args) == 3):
@@ -117,14 +122,17 @@ def startFTP():
                 message =  control_socket.recv(2048).decode().strip()
                 print(message)
                 if (message[0] == "5"):
+                    print("Login failed.")
                     continue
                 password = args[2]
 
             command_message = "PASS " + password + "\r\n"
             control_socket.sendall(command_message.encode())
             message =  control_socket.recv(2048).decode().strip()
+            print()
             print(message)
             if (message[0] == "5"):
+                print("Login failed.")
                 continue
 
         elif command == "cd": 
